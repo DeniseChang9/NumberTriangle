@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -109,26 +111,35 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
-        NumberTriangle top = null;
-
         String line = br.readLine();
+        List<List<NumberTriangle>> allTriangles = new ArrayList<>();
+
+        // create an array of arrays of NumberTriangle
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
+            String[] roots = line.split(" ");
+            List<NumberTriangle> triangleLine = new ArrayList<>();
+            for (String s : roots) {
+                NumberTriangle newTriangle = new NumberTriangle((Integer.parseInt(s)));
+                triangleLine.add(newTriangle);
+            }
+            allTriangles.add(triangleLine);
             line = br.readLine();
         }
         br.close();
-        return top;
+
+        // assigns the existing NumberTriangles to each other's left and right
+        //loops every line until the before last line
+        for (int i = 0; i < allTriangles.size() - 1; i++) {
+            //loop every NumberTriangle inside the line
+            for (int j = 0; j < allTriangles.get(i).size(); j++) {
+                NumberTriangle currentTriangle = allTriangles.get(i).get(j);
+                currentTriangle.setLeft(allTriangles.get(i + 1).get(j));
+                currentTriangle.setRight(allTriangles.get(i + 1).get(j + 1));
+            }
+        }
+
+        // returns the first (top) NumberTriangle
+        return allTriangles.get(0).get(0);
     }
 
     public static void main(String[] args) throws IOException {
