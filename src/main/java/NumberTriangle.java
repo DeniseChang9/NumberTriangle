@@ -90,9 +90,19 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return this.root;
+        }
+        // checks if the first action is "l"
+        if (path.charAt(0) == 'l') {
+            return this.left.retrieve(path.substring(1));
+        }
+        //the first char is 'r'
+        else {
+            return this.right.retrieve(path.substring(1));
+        }
     }
+
 
     /** Read in the NumberTriangle structure from a file.
      *
